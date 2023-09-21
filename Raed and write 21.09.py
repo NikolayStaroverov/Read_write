@@ -43,34 +43,29 @@ print(get_shop_list_by_dishes (['Омлет','Омлет'],2))
 
 
 
-def read_and_sort_files (f1,f2,f3):
-    file_names = [f1, f2, f3]
-    num_of_files=int(len(file_names))
+def read_and_write_files (f1,f2,f3):
+    file_names_list = [f1, f2, f3]
+    num_of_files=int(len(file_names_list))
     file_name_and_length={}
+    file_name_and_text_dict={}
     for i in range(num_of_files):
-        with open(file_names[i], encoding='utf-8') as file:
-            text=file.readlines()
+        with open(file_names_list[i], encoding='utf-8') as file:
+            text =file.readlines()
+            file_name_and_text_dict[file_names_list[i]]=text
             number_of_lines=len(text)
-            file_name_and_length[number_of_lines]=file_names[i]
+            file_name_and_length[number_of_lines]=file_names_list[i]
     file_name_and_len_sorted=sorted(file_name_and_length.items())
-    global file_names_sorted
-    file_names_sorted=[]
+
     for i in range(num_of_files):
-        file_names_sorted.append(file_name_and_len_sorted[i][1])
-    return file_names_sorted
+        file_name= file_name_and_len_sorted[i][1]
+        text=file_name_and_text_dict.get(file_name)
+        with open('final.txt', 'a',encoding='utf-8') as final_file:
+            final_file.write(file_name +'\n')
+            final_file.write(str(len(text))+'\n')
+            for LINE in text:
+                final_file.write(LINE)
+            final_file.write('\n')
+            final_file.write('\n')
 
-read_and_sort_files('1.txt','2.txt','3.txt')
 
-def write_to_file (f):
-    with open(f, encoding='utf-8') as file:
-        text=file.readlines()
-    with open('final.txt', 'a',encoding='utf-8') as final_file:
-        final_file.write(f+'\n')
-        final_file.write(str(len(text))+'\n')
-        for LINE in text:
-            final_file.write(LINE)
-        final_file.write('\n')
-        final_file.write('\n')
-
-for i in range(3):
-    write_to_file(file_names_sorted[i])
+read_and_write_files ('1.txt','2.txt','3.txt')
